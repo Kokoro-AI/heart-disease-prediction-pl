@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+ROOT="`dirname $0`/.."
+
+function docker_run() {
+  local images=$(docker images --filter=reference='heart-disease-prediction-pl' | wc -l)
+  if [ $images -lt 2 -o "$1" = "dev" ]; then
+    echo -e "Load development environment\nTry with kokoro_help.\n\n"
+    docker run --rm -it -v $ROOT:/app -w /app --entrypoint=swipl swipl:stable /app/kokoro.pl
+    exit 0
+  else
+    echo -e "Load production environment\nTry with kokoro_help.\n\n"
+    docker run --rm -it heart-disease-prediction-pl
+    exit 0
+  fi
+}
+
+if command docker 2> /dev/null; then
+  docker_run $1
+else
+  swipl $ROOT/kokoro.pl
+fi
