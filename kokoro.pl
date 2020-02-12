@@ -13,6 +13,190 @@ kokoro_help :-
   write("║   disease(lucas, Y).                      ║"), nl,
   write("╚═══════════════════════════════════════════╝").
 
+resting_blood_pressure_162_0(X) :- X =< 162.
+resting_blood_pressure_109_0(X) :- X =< 109.
+
+num_major_vessels_0_5(X) :- X =< 0.5.
+num_major_vessels_2_5(X) :- X =< 2.5.
+
+thalassemia(X) :- X =\= 2.
+
+st_slope(X) :- X =\= 1.
+
+age_51_5(Age) :- Age =< 51.5.
+age_45_5(Age) :- Age =< 45.5.
+
+exercise_induced_angina(_) :- true.
+
+st_depression_0_25(X) :- X =< 0.25.
+st_depression_2_3(X) :- X =< 2.3.
+
+cholesterol_221_5(X) :- X =< 221.5.
+
+chest_pain_type(X) :- X =\= 2.
+
+disease0(Patient) :-
+  symptom(Patient, resting_blood_pressure, RestingBloodPressure),
+  not(resting_blood_pressure_162_0(RestingBloodPressure)).
+
+disease1(Patient) :-
+  symptom(Patient, st_depression, StDepression),
+  not(st_depression_0_25(StDepression)),
+
+  symptom(Patient, age, Age),
+  age_51_5(Age),
+
+  symptom(Patient, thalassemia, Thalassemia),
+  thalassemia(Thalassemia),
+
+  symptom(Patient, num_major_vessels, NumMajorVessels),
+  num_major_vessels_0_5(NumMajorVessels),
+
+  symptom(Patient, resting_blood_pressure, RestingBloodPressure),
+  resting_blood_pressure_162_0(RestingBloodPressure).
+
+disease2(Patient) :-
+  symptom(Patient, cholesterol, Cholesterol),
+  cholesterol_221_5(Cholesterol),
+
+  symptom(Patient, age, Age),
+  not(age_51_5(Age)),
+
+  symptom(Patient, thalassemia, Thalassemia),
+  thalassemia(Thalassemia),
+
+  symptom(Patient, num_major_vessels, NumMajorVessels),
+  num_major_vessels_0_5(NumMajorVessels),
+
+  symptom(Patient, resting_blood_pressure, RestingBloodPressure),
+  resting_blood_pressure_162_0(RestingBloodPressure).
+
+disease3(Patient) :-
+  symptom(Patient, age, X),
+  not(age_45_5(X)),
+  
+  symptom(Patient, resting_blood_pressure, RestingBloodPressure),
+  resting_blood_pressure_109_0(RestingBloodPressure),
+  
+  symptom(Patient, thalassemia, Thalassemia),
+  not(thalassemia(Thalassemia)),
+  
+  symptom(Patient, num_major_vessels, NumMajorVessels),
+  num_major_vessels_0_5(NumMajorVessels),
+  
+  symptom(Patient, resting_blood_pressure, RestingBloodPressure2),
+  resting_blood_pressure_162_0(RestingBloodPressure2).
+
+disease4(Patient) :-
+  symptom(Patient, st_depression, StDepression),
+  not(st_depression_2_3(StDepression)),
+  
+  symptom(Patient, resting_blood_pressure, RestingBloodPressure),
+  not(resting_blood_pressure_109_0(RestingBloodPressure)),
+  
+  symptom(Patient, thalassemia, Thalassemia),
+  not(thalassemia(Thalassemia)),
+  
+  symptom(Patient, num_major_vessels, NumMajorVessels),
+  num_major_vessels_0_5(NumMajorVessels),
+  
+  symptom(Patient, resting_blood_pressure, RestingBloodPressure2),
+  resting_blood_pressure_162_0(RestingBloodPressure2).
+
+disease5(Patient) :-
+  symptom(Patient, chest_pain_type, ChestPainType),
+  chest_pain_type(ChestPainType),
+  
+  symptom(Patient, thalassemia, Thalassemia),
+  thalassemia(Thalassemia),
+  
+  symptom(Patient, st_slope, StSlope),
+  st_slope(StSlope),
+  
+  symptom(Patient, num_major_vessels, NumMajorVessels),
+  not(num_major_vessels_0_5(NumMajorVessels)),
+  
+  symptom(Patient, resting_blood_pressure, RestingBloodPressure),
+  resting_blood_pressure_162_0(RestingBloodPressure).
+
+disease6(Patient) :-
+  symptom(Patient, num_major_vessels, NumMajorVessels),
+  not(num_major_vessels_2_5(NumMajorVessels)),
+  
+  symptom(Patient, thalassemia, Thalassemia),
+  not(thalassemia(Thalassemia)),
+  
+  symptom(Patient, st_slope, StSlope),
+  st_slope(StSlope),
+  
+  symptom(Patient, num_major_vessels, NumMajorVessels2),
+  not(num_major_vessels_0_5(NumMajorVessels2)),
+  
+  symptom(Patient, resting_blood_pressure, RestingBloodPressure),
+  resting_blood_pressure_162_0(RestingBloodPressure).
+
+disease7(Patient) :-
+  symptom(Patient, st_slope, StSlope),
+  not(st_slope(StSlope)),
+  
+  symptom(Patient, num_major_vessels, NumMajorVessels),
+  not(num_major_vessels_0_5(NumMajorVessels)),
+  
+  symptom(Patient, resting_blood_pressure, RestingBloodPressure),
+  resting_blood_pressure_162_0(RestingBloodPressure).
+
+disease(Patient) :-
+  disease0(Patient);
+  disease1(Patient);
+  disease2(Patient);
+  disease3(Patient);
+  disease4(Patient);
+  disease5(Patient);
+  disease6(Patient);
+  disease7(Patient).
+
+assert_disease(Patient) :-
+  dynamic(symptom/3),
+  write("Patient "), write(Patient), nl,
+
+  write("Type resting_blood_pressure"), nl,
+  read(RestingBloodPressure),
+  assert((symptom(Patient, resting_blood_pressure, RestingBloodPressure))),
+
+  write("Type num_major_vessels"), nl,
+  read(NumMajorVessels),
+  assert((symptom(Patient, num_major_vessels, NumMajorVessels))),
+
+  write("Type thalassemia"), nl,
+  read(Thalassemia),
+  assert((symptom(Patient, thalassemia, Thalassemia))),
+
+  write("Type st_slope"), nl,
+  read(StSlope),
+  assert((symptom(Patient, st_slope, StSlope))),
+
+  write("Type age"), nl,
+  read(Age),
+  assert((symptom(Patient, age, Age))),
+
+  write("Type exercise_induced_angina"), nl,
+  read(ExerciseInducedAngina),
+  assert((symptom(Patient, exercise_induced_angina, ExerciseInducedAngina))),
+
+  write("Type st_depression"), nl,
+  read(StDepression),
+  assert((symptom(Patient, st_depression, StDepression))),
+
+  write("Type cholesterol"), nl,
+  read(Cholesterol),
+  assert((symptom(Patient, cholesterol, Cholesterol))),
+
+  write("Type chest_pain_type"), nl,
+  read(ChestPainType),
+  assert((symptom(Patient, chest_pain_type, ChestPainType))),
+
+  disease(Patient).symptom(p0, age, 63.0).
+
 symptom(p0, age, 63.0).
 symptom(p0, chest_pain_type, 3.0).
 symptom(p0, resting_blood_pressure, 145.0).
@@ -3042,187 +3226,3 @@ symptom(p302, st_depression, 0.0).
 symptom(p302, st_slope, 1.0).
 symptom(p302, num_major_vessels, 1.0).
 symptom(p302, thalassemia, 2.0).
-
-resting_blood_pressure_162_0(X) :- X =< 162.
-resting_blood_pressure_109_0(X) :- X =< 109.
-
-num_major_vessels_0_5(X) :- X =< 0.5.
-num_major_vessels_2_5(X) :- X =< 2.5.
-
-thalassemia(X) :- X =\= 2.
-
-st_slope(X) :- X =\= 1.
-
-age_51_5(Age) :- Age =< 51.5.
-age_45_5(Age) :- Age =< 45.5.
-
-exercise_induced_angina(_) :- true.
-
-st_depression_0_25(X) :- X =< 0.25.
-st_depression_2_3(X) :- X =< 2.3.
-
-cholesterol_221_5(X) :- X =< 221.5.
-
-chest_pain_type(X) :- X =\= 2.
-
-disease0(Patient) :-
-  symptom(Patient, resting_blood_pressure, RestingBloodPressure),
-  not(resting_blood_pressure_162_0(RestingBloodPressure)).
-
-disease1(Patient) :-
-  symptom(Patient, st_depression, StDepression),
-  not(st_depression_0_25(StDepression)),
-
-  symptom(Patient, age, Age),
-  age_51_5(Age),
-
-  symptom(Patient, thalassemia, Thalassemia),
-  thalassemia(Thalassemia),
-
-  symptom(Patient, num_major_vessels, NumMajorVessels),
-  num_major_vessels_0_5(NumMajorVessels),
-
-  symptom(Patient, resting_blood_pressure, RestingBloodPressure),
-  resting_blood_pressure_162_0(RestingBloodPressure).
-
-disease2(Patient) :-
-  symptom(Patient, cholesterol, Cholesterol),
-  cholesterol_221_5(Cholesterol),
-
-  symptom(Patient, age, Age),
-  not(age_51_5(Age)),
-
-  symptom(Patient, thalassemia, Thalassemia),
-  thalassemia(Thalassemia),
-
-  symptom(Patient, num_major_vessels, NumMajorVessels),
-  num_major_vessels_0_5(NumMajorVessels),
-
-  symptom(Patient, resting_blood_pressure, RestingBloodPressure),
-  resting_blood_pressure_162_0(RestingBloodPressure).
-
-disease3(Patient) :-
-  symptom(Patient, age, X),
-  not(age_45_5(X)),
-  
-  symptom(Patient, resting_blood_pressure, RestingBloodPressure),
-  resting_blood_pressure_109_0(RestingBloodPressure),
-  
-  symptom(Patient, thalassemia, Thalassemia),
-  not(thalassemia(Thalassemia)),
-  
-  symptom(Patient, num_major_vessels, NumMajorVessels),
-  num_major_vessels_0_5(NumMajorVessels),
-  
-  symptom(Patient, resting_blood_pressure, RestingBloodPressure2),
-  resting_blood_pressure_162_0(RestingBloodPressure2).
-
-disease4(Patient) :-
-  symptom(Patient, st_depression, StDepression),
-  not(st_depression_2_3(StDepression)),
-  
-  symptom(Patient, resting_blood_pressure, RestingBloodPressure),
-  not(resting_blood_pressure_109_0(RestingBloodPressure)),
-  
-  symptom(Patient, thalassemia, Thalassemia),
-  not(thalassemia(Thalassemia)),
-  
-  symptom(Patient, num_major_vessels, NumMajorVessels),
-  num_major_vessels_0_5(NumMajorVessels),
-  
-  symptom(Patient, resting_blood_pressure, RestingBloodPressure2),
-  resting_blood_pressure_162_0(RestingBloodPressure2).
-
-disease5(Patient) :-
-  symptom(Patient, chest_pain_type, ChestPainType),
-  chest_pain_type(ChestPainType),
-  
-  symptom(Patient, thalassemia, Thalassemia),
-  thalassemia(Thalassemia),
-  
-  symptom(Patient, st_slope, StSlope),
-  st_slope(StSlope),
-  
-  symptom(Patient, num_major_vessels, NumMajorVessels),
-  not(num_major_vessels_0_5(NumMajorVessels)),
-  
-  symptom(Patient, resting_blood_pressure, RestingBloodPressure),
-  resting_blood_pressure_162_0(RestingBloodPressure).
-
-disease6(Patient) :-
-  symptom(Patient, num_major_vessels, NumMajorVessels),
-  not(num_major_vessels_2_5(NumMajorVessels)),
-  
-  symptom(Patient, thalassemia, Thalassemia),
-  not(thalassemia(Thalassemia)),
-  
-  symptom(Patient, st_slope, StSlope),
-  st_slope(StSlope),
-  
-  symptom(Patient, num_major_vessels, NumMajorVessels2),
-  not(num_major_vessels_0_5(NumMajorVessels2)),
-  
-  symptom(Patient, resting_blood_pressure, RestingBloodPressure),
-  resting_blood_pressure_162_0(RestingBloodPressure).
-
-disease7(Patient) :-
-  symptom(Patient, st_slope, StSlope),
-  not(st_slope(StSlope)),
-  
-  symptom(Patient, num_major_vessels, NumMajorVessels),
-  not(num_major_vessels_0_5(NumMajorVessels)),
-  
-  symptom(Patient, resting_blood_pressure, RestingBloodPressure),
-  resting_blood_pressure_162_0(RestingBloodPressure).
-
-disease(Patient) :-
-  disease0(Patient);
-  disease1(Patient);
-  disease2(Patient);
-  disease3(Patient);
-  disease4(Patient);
-  disease5(Patient);
-  disease6(Patient);
-  disease7(Patient).
-
-assert_disease(Patient) :-
-  dynamic(symptom/3),
-  write("Patient "), write(Patient), nl,
-
-  write("Type resting_blood_pressure"), nl,
-  read(RestingBloodPressure),
-  assert((symptom(Patient, resting_blood_pressure, RestingBloodPressure))),
-
-  write("Type num_major_vessels"), nl,
-  read(NumMajorVessels),
-  assert((symptom(Patient, num_major_vessels, NumMajorVessels))),
-
-  write("Type thalassemia"), nl,
-  read(Thalassemia),
-  assert((symptom(Patient, thalassemia, Thalassemia))),
-
-  write("Type st_slope"), nl,
-  read(StSlope),
-  assert((symptom(Patient, st_slope, StSlope))),
-
-  write("Type age"), nl,
-  read(Age),
-  assert((symptom(Patient, age, Age))),
-
-  write("Type exercise_induced_angina"), nl,
-  read(ExerciseInducedAngina),
-  assert((symptom(Patient, exercise_induced_angina, ExerciseInducedAngina))),
-
-  write("Type st_depression"), nl,
-  read(StDepression),
-  assert((symptom(Patient, st_depression, StDepression))),
-
-  write("Type cholesterol"), nl,
-  read(Cholesterol),
-  assert((symptom(Patient, cholesterol, Cholesterol))),
-
-  write("Type chest_pain_type"), nl,
-  read(ChestPainType),
-  assert((symptom(Patient, chest_pain_type, ChestPainType))),
-
-  disease(Patient).symptom(p0, age, 63.0).
