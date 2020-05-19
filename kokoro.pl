@@ -25,6 +25,7 @@ st_slope(X) :- X =\= 1.
 
 age_51_5(Age) :- Age =< 51.5.
 age_45_5(Age) :- Age =< 45.5.
+age_40_50(Age) :- Age >= 40 , Age =< 50.
 
 exercise_induced_angina(_) :- true.
 
@@ -32,6 +33,7 @@ st_depression_0_25(X) :- X =< 0.25.
 st_depression_2_3(X) :- X =< 2.3.
 
 cholesterol_221_5(X) :- X =< 221.5.
+cholesterol_240(X) :- X > 240.0.
 
 chest_pain_type(X) :- X =\= 2.
 
@@ -145,6 +147,13 @@ disease7(Patient) :-
   symptom(Patient, resting_blood_pressure, RestingBloodPressure),
   resting_blood_pressure_162_0(RestingBloodPressure).
 
+disease8(Patient) :-
+  symptom(Patient, cholesterol, Cholesterol),
+  cholesterol_240(Cholesterol),
+
+  symptom(Patient, age, Age),
+  age_40_50(Age).
+
 disease(Patient) :-
   disease0(Patient);
   disease1(Patient);
@@ -153,7 +162,8 @@ disease(Patient) :-
   disease4(Patient);
   disease5(Patient);
   disease6(Patient);
-  disease7(Patient).
+  disease7(Patient);
+  disease8(Patient).
 
 assert_disease(Patient) :-
   dynamic(symptom/3),
