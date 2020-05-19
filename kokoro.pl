@@ -205,7 +205,7 @@ assert_disease(Patient) :-
   read(ChestPainType),
   assert((symptom(Patient, chest_pain_type, ChestPainType))),
 
-  disease(Patient).symptom(p0, age, 63.0).
+  disease(Patient).
 
 symptom(p0, age, 63.0).
 symptom(p0, chest_pain_type, 3.0).
